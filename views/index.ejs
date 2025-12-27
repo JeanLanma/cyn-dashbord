@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Reservas - Cynistal</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .table-hover tbody tr:hover { background-color: #f1f3f5; }
+        .status-dot { height: 10px; width: 10px; background-color: #28a745; border-radius: 50%; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>🏨 Reservas Hotel Cynistal</h1>
+            <button class="btn btn-primary" onclick="location.reload()">🔄 Actualizar</button>
+        </div>
+
+        <div class="card p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Check-in</th>
+                            <th>Habitación</th>
+                            <th>Huéspedes</th>
+                            <th>Contacto</th>
+                            <th>Fecha Registro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (reservations.length > 0) { %>
+                            <% reservations.forEach(function(reserva) { %>
+                                <tr>
+                                    <td>#<%= reserva.id %></td>
+                                    <td class="fw-bold"><%= reserva.client_name %></td>
+                                    <!-- Formateamos la fecha a algo legible -->
+                                    <td><%= new Date(reserva.checkin).toLocaleDateString() %></td>
+                                    <td>
+                                        <span class="badge bg-info text-dark"><%= reserva.room_type %></span>
+                                    </td>
+                                    <td><%= reserva.guests %> 👤</td>
+                                    <td>@<%= reserva.telegram_contact %></td>
+                                    <td class="text-muted small"><%= new Date(reserva.created_at).toLocaleString() %></td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="7" class="text-center p-4">No hay reservas aún. ¡Ve a Telegram!</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <footer class="text-center mt-5 text-muted">
+            <small>Sistema impulsado por Node.js + VPS Cynistal</small>
+        </footer>
+    </div>
+</body>
+</html>
