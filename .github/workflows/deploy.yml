@@ -1,0 +1,39 @@
+name: Deploy to VPS
+
+# ¿Cuándo se ejecuta? Cuando haces push a la rama 'main'
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v4
+
+    - name: Desplegar en VPS via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        # El script que se ejecutará en tu servidor
+        script: |
+          echo "🚀 Iniciando despliegue automático..."
+          
+          # 1. Ir a la carpeta del proyecto
+          cd /var/www/dashboard
+          
+          # 2. Descargar cambios de GitHub
+          git pull origin master
+          
+          # 3. Instalar nuevas dependencias (si las hay)
+          npm install --production
+          
+          # 4. Reiniciar la aplicación con PM2
+          pm2 restart dashboard-reservas
+          
+          echo "✅ Despliegue completado con éxito."
